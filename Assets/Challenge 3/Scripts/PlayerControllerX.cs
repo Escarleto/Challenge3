@@ -7,6 +7,7 @@ public class PlayerControllerX : MonoBehaviour
     public bool gameOver;
 
     public float floatForce;
+    [SerializeField] private float BounceForce;
     private float gravityModifier = 1.5f;
     private Rigidbody playerRb;
 
@@ -16,6 +17,7 @@ public class PlayerControllerX : MonoBehaviour
     private AudioSource playerAudio;
     public AudioClip moneySound;
     public AudioClip explodeSound;
+    [SerializeField] private AudioClip BounceSound;
 
 
     // Start is called before the first frame update
@@ -25,7 +27,7 @@ public class PlayerControllerX : MonoBehaviour
         playerAudio = GetComponent<AudioSource>();
 
         // Apply a small upward force at the start of the game
-        playerRb.AddForce(Vector3.up * 5, ForceMode.Impulse);
+        playerRb = GetComponent<Rigidbody>();
 
     }
 
@@ -58,6 +60,11 @@ public class PlayerControllerX : MonoBehaviour
             playerAudio.PlayOneShot(moneySound, 1.0f);
             Destroy(other.gameObject);
 
+        }
+        else if (other.gameObject.CompareTag("Limits"))
+        {
+            playerRb.AddForce(Vector3.up * BounceForce, ForceMode.Impulse);
+            playerAudio.PlayOneShot(BounceSound, 1.0f);
         }
 
     }
